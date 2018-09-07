@@ -1,32 +1,39 @@
 {
-  "name": "hello-next",
+  "name": "nm-candidate-tester",
   "version": "1.0.0",
-  "description": "",
+  "description": "Norigin Media sample work submission",
+  "author": "Timo Aho <zeukkari@gmail.com>",
   "main": "index.js",
   "scripts": {
     "dev": "next",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "backend": "./node_modules/.bin/osprey-mock-service -f ./node_modules/nm-mock-api/demo.raml -p 1337 --cors"
   },
-  "keywords": [],
-  "author": "Timo Aho",
-  "license": "ISC",
+  "keywords": [
+    "EPG"
+  ],
+  "license": "MIT",
   "dependencies": {
     "@zeit/next-sass": "^0.2.0",
+    "babel-plugin-styled-components": "^1.6.4",
     "classnames": "^2.2.6",
-    "immutable": "^3.8.2",
+    "isomorphic-unfetch": "^2.1.1",
     "moment": "^2.22.2",
     "next": "^6.1.2",
     "next-eslint": "0.0.4",
+    "nm-mock-api": "git+https://github.com/NoriginMedia/mock-api.git#cloudberry",
     "node-sass": "^4.9.3",
     "react": "^16.5.0",
     "react-dom": "^16.5.0",
     "react-redux": "^5.0.7",
     "redux": "^4.0.0",
-    "redux-thunk": "^2.3.0"
+    "redux-thunk": "^2.3.0",
+    "styled-components": "^3.4.5"
   },
   "devDependencies": {
-    "eslint": "^5.5.0",
+    "@babel/preset-env": "^7.0.0",
+    "eslint": "^4.19.1",
     "eslint-config-airbnb": "^17.1.0",
     "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-jsx": "0.0.2",
