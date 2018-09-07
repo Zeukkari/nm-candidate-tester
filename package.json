@@ -1,0 +1,36 @@
+{
+  "name": "hello-next",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "next",
+    "build": "next build",
+    "start": "next start"
+  },
+  "keywords": [],
+  "author": "Timo Aho",
+  "license": "ISC",
+  "dependencies": {
+    "@zeit/next-sass": "^0.2.0",
+    "classnames": "^2.2.6",
+    "immutable": "^3.8.2",
+    "moment": "^2.22.2",
+    "next": "^6.1.2",
+    "next-eslint": "0.0.4",
+    "node-sass": "^4.9.3",
+    "react": "^16.5.0",
+    "react-dom": "^16.5.0",
+    "react-redux": "^5.0.7",
+    "redux": "^4.0.0",
+    "redux-thunk": "^2.3.0"
+  },
+  "devDependencies": {
+    "eslint": "^5.5.0",
+    "eslint-config-airbnb": "^17.1.0",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-jsx": "0.0.2",
+    "eslint-plugin-jsx-a11y": "^6.1.1",
+    "eslint-plugin-react": "^7.11.1"
+  }
+}
