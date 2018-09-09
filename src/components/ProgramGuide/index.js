@@ -85,6 +85,33 @@ const CurrentIndicator = styled.div`
   }
 `
 
+const StickyButton = styled.button`
+  background: yellow;
+  color: white;
+
+  display: inline;
+  float: right;
+
+  font-size: 2em;
+  margin: 1em;
+  padding: 2em;
+
+  padding: 0.25em 1em;
+  border: 1px solid black;
+  box-shadow: 2px -2px 2px;
+  border-radius: 3px;
+  position: fixed;
+  bottom: 15%;
+  right: 15%;
+
+  &:hover {
+    transform: scale(1.1);
+  }
+  &:active {
+    color: grey;
+  }
+`
+
 class ProgramGuide extends Component {
   constructor(props) {
     super(props)
@@ -116,6 +143,9 @@ class ProgramGuide extends Component {
                 <CurrentIndicator theme={theme} offset={indicatorPosition} />
               </div>
             </TimetableScrollable>
+            <div>
+              <StickyButton>NOW</StickyButton>
+            </div>
           </Timetable>
         </ThemeProvider>
       </div>
