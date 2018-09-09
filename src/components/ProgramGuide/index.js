@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import ReactDOM from 'react-dom'
 import moment from 'moment'
 import styled, { ThemeProvider } from 'styled-components'
 
@@ -53,12 +54,26 @@ const Timetable = styled.div`
   top: 0;
   left: 0;
   bottom: 0;
+  flex: 0 0 auto;
+  display: inline-block;
+
+  transition: all 0.2s ease-in-out;
 `
 
-const TimetableScrollable = styled.div`
-  position: relative;
-  height: 100%;
+const FullWidth = styled.div`
+  position: absolute;
   width: 100%;
+  left: 0;
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto;
+  overlow-x: auto;
+`
+
+const ScrollWrapper = styled.div``
+
+const TimetableScrollable = styled.div`
   opacity: ${props => (props.loading ? 0 : 1)};
   transition: all 0.6s ease-in-out;
 `
@@ -93,16 +108,17 @@ const StickyButton = styled.button`
   float: right;
 
   font-size: 2em;
-  margin: 1em;
-  padding: 2em;
+  margin: 0em;
 
-  padding: 0.25em 1em;
+  padding: 0.25em;
   border: 1px solid black;
   box-shadow: 2px -2px 2px;
   border-radius: 3px;
   position: fixed;
   bottom: 15%;
   right: 15%;
+
+  transition: all 0.2s ease-in-out;
 
   &:hover {
     transform: scale(1.1);
@@ -115,11 +131,113 @@ const StickyButton = styled.button`
 class ProgramGuide extends Component {
   constructor(props) {
     super(props)
+
+    this.myRef = React.createRef()
+    timer: null,
+      (this.state = {
+        loading: false,
+        channels: [],
+      })
+    this.handleClick = this.handleClick.bind(this)
     this.props.actions.fetchData()
-    this.state = {
-      loading: false,
-      channels: [],
+
+    this.percentage
+    this.starttime
+
+    this.offset
+    this.targetY = this.myRef
+
+    this.settings = {
+      duration: 100,
+      easing: {
+        outQuint: function(x, t, b, c, d) {
+          return c * ((t = t / d - 1) * t * t * t * t + 1) + b
+        },
+      },
     }
+  }
+
+  scrollTo(node) {
+    console.log('node: ', node)
+
+    var nodeTop = node.offsetLeft
+    var nodeHeight = node.offsetWidth
+    var body = document.body
+    var html = document.documentElement
+    var height = Math.max(
+      body.scrollHeight,
+      body.offsetHeight,
+      html.clientHeight,
+      html.scrollHeight,
+      html.offsetHeight,
+    )
+    var windowHeight = window.innerWidth
+    var offset = window.pageXOffset
+    var delta = nodeTop - offset
+    var bottomScrollableY = height - windowHeight
+    var targetY =
+      bottomScrollableY < delta
+        ? bottomScrollableY - (height - nodeTop - nodeHeight + offset)
+        : delta
+
+    this.startTime = Date.now()
+    this.percentage = 0
+    this.elapsed = 0
+    this.yScroll = 0
+
+    if (this.timer) {
+      clearInterval(this.timer)
+    }
+
+    this.timer = setTimeout(this.step, 1000)
+  }
+
+  stop() {
+    clearTimeout(this.timer)
+  }
+
+  step() {
+    console.log('STEP!', this.percentage)
+    this.elapsed = Date.now() - this.startTime
+
+    this.settings = {
+      duration: 100,
+      easing: {
+        outQuint: function(x, t, b, c, d) {
+          return c * ((t = t / d - 1) * t * t * t * t + 1) + b
+        },
+      },
+    }
+
+    if (this.elapsed > this.settings.duration) {
+      clearTimeout(this.timer)
+    }
+
+    this.percentage = this.elapsed / this.settings.duration
+
+    if (this.percentage > 1) {
+      clearTimeout(this.timer)
+    } else {
+      console.log('yScroll: ', this.yScroll)
+      this.yScroll = this.settings.easing.outQuint(
+        this.yScroll,
+        this.elapsed,
+        this.offset,
+        this.targetY,
+        this.settings.duration,
+      )
+      console.log('yScroll: ', this.yScroll)
+      window.scrollTo(this.yScroll, 0)
+      this.timer = setTimeout(this.step, 1000)
+    }
+  }
+
+  handleClick() {
+    console.log('click handled!', this.myRef)
+    const domNode = ReactDOM.findDOMNode(this.myRef.current)
+    // domNode.scrollIntoView({ behaviour: 'smooth' })
+    // window.scrollTo(0, this.myRef)
+    this.scrollTo(domNode)
   }
 
   render() {
@@ -132,21 +250,31 @@ class ProgramGuide extends Component {
     return (
       <div>
         <ThemeProvider theme={theme}>
-          <Timetable theme={theme}>
-            <PageLoader theme={theme} loading={loading} />
-            <TimetableScrollable loading={loading}>
+          <div>
+            <Timetable theme={theme}>
+              <PageLoader theme={theme} loading={loading} />
               <div>
-                <DateRowWidget theme={theme} />
-                <TimeRowWidget channels={channels} theme={theme} />
-                <LabelColumn channels={channels} />
-                <TableBody channels={channels} theme={theme} />
-                <CurrentIndicator theme={theme} offset={indicatorPosition} />
+                <TimetableScrollable loading={loading}>
+                  <ScrollWrapper>
+                    <DateRowWidget theme={theme} />
+                    <TimeRowWidget channels={channels} theme={theme} />
+                    <LabelColumn channels={channels} />
+                    <TableBody channels={channels} theme={theme} />
+                    <CurrentIndicator
+                      theme={theme}
+                      offset={indicatorPosition}
+                      ref={this.myRef}
+                    />
+                  </ScrollWrapper>
+                </TimetableScrollable>
               </div>
-            </TimetableScrollable>
-            <div>
-              <StickyButton>NOW</StickyButton>
-            </div>
-          </Timetable>
+              <div>
+                <StickyButton onClick={this.handleClick}>
+                  <h3>NOW</h3>
+                </StickyButton>
+              </div>
+            </Timetable>
+          </div>
         </ThemeProvider>
       </div>
     )
