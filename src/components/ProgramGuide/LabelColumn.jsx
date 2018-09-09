@@ -1,3 +1,4 @@
+import React from 'react'
 import styled from 'styled-components'
 
 const Captions = styled.div`
@@ -40,7 +41,7 @@ const LabelColumn = props => {
   const { channels } = props
   const captionsElements = channels.map(channel => (
     <CaptionsItem key={channel.id}>
-      <img src={channel.images.logo} />
+      <img src={channel.images.logo} alt="channel logo" />
     </CaptionsItem>
   ))
 

@@ -1,5 +1,6 @@
-import TableCell from './TableCell'
+import React from 'react'
 import styled from 'styled-components'
+import TableCell from './TableCell'
 
 const BodyRow = styled.div`
   height: 60px;

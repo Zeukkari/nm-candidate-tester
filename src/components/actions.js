@@ -1,4 +1,4 @@
-import fetch from 'isomorphic-unfetch'
+import fetch from 'isomorphic-fetch'
 
 const API_URL = 'http://localhost:1337'
 

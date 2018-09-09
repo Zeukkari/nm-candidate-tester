@@ -1,4 +1,4 @@
-import { Component } from 'react'
+import React, { Component } from 'react'
 import moment from 'moment'
 import styled, { ThemeProvider } from 'styled-components'
 
@@ -15,7 +15,7 @@ const theme = {
   color: 'white',
   color2: '#A0A0A0',
   bg: '#202020',
-  cellWidth: '200px',
+  cellWidth: '300px',
   cellBgColor: '#111111',
   cellBgActiveColor: '#393939',
   borderColor: 'rgba(255, 255, 255, 0.1)',
